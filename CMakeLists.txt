@@ -1,12 +1,10 @@
 # Set cmake minimum version.
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 
 # Set the project details.
-set(PROJECT_NAME cmake-example)
+set(PROJECT_NAME ICT397-Lab2)
 project(${PROJECT_NAME} LANGUAGES CXX)
 
-# Set Source Directrory
-aux_source_directory(./src SRC_LIST)
 
 # Disable in-source builds.
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
@@ -58,4 +56,12 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 find_package(OpenGL COMPONENTS OpenGL REQUIRED)
 
 # Include and link against dependencies.
-target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL SDL2)
+target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL SDL2 SDL2main glm glad)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/shader $<TARGET_FILE_DIR:${PROJECT_NAME}>/shader)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/images $<TARGET_FILE_DIR:${PROJECT_NAME}>/images)
